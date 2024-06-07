@@ -1,11 +1,11 @@
 {
-  "name": "helmfile-installer-pipeline-task",
+  "name": "vals-installer-pipeline-task",
   "scripts": {
     "postinstall": "cd task && npm install",
     "package": "rimraf *.vsix task/dist && tsc -p task && tfx extension create --output-path PackageOutput",
     "bump-version": "node version-bump.js",
-    "publish": "tfx extension publish --publisher gsoft",
-    "publish:dev": "tfx extension publish --publisher gsoft-dev",
+    "publish": "tfx extension publish --publisher iotnxt",
+    "publish:dev": "tfx extension publish --publisher iotnxt-dev",
     "test": "mocha task/tests"
   },
   "husky": {

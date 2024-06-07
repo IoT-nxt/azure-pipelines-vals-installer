@@ -1,137 +1,142 @@
-import * as path from "path";
-import * as fs from "fs";
-import * as toolLib from "azure-pipelines-tool-lib";
-import * as os from "os";
-import * as util from "util";
-import * as uuidV4 from "uuid/v4";
-import * as tl from "azure-pipelines-task-lib";
-import * as semver from "semver";
+import * as path from 'path';
+import * as fs from 'fs';
+import * as toolLib from 'azure-pipelines-tool-lib';
+import * as os from 'os';
+import * as util from 'util';
+import * as uuidV4 from 'uuid/v4';
+import * as tl from 'azure-pipelines-task-lib';
+import * as semver from 'semver';
 
-const helmfileToolName = "helmfile";
-const helmfileAllReleasesUrl = "https://api.github.com/repos/roboll/helmfile/releases";
-const stableHelmfileVersion = "v0.139.9";
+const valsToolName = 'vals';
+const valsAllReleasesUrl = 'https://api.github.com/repos/helmfile/vals/releases';
+const stableValsVersion = 'v0.137.2';
 
 function getExecutableExtension(): string {
-    if (os.type().match(/^Win/)) {
-        return ".exe";
-    }
+  if (os.type().match(/^Win/)) {
+    return '.exe';
+  }
 
-    return "";
+  return '';
 }
 
 function getSupportedLinuxArchitecture(): string {
-    let supportedArchitecture = "amd64";
-    const architecture = os.arch();
-    if (architecture.startsWith("arm")) { //both arm64 and arm are handled
-        supportedArchitecture = architecture;
-    }
-    return supportedArchitecture;
+  let supportedArchitecture = 'amd64';
+  const architecture = os.arch();
+  if (architecture.startsWith('arm')) {
+    //both arm64 and arm are handled
+    supportedArchitecture = architecture;
+  }
+  return supportedArchitecture;
 }
 
-function findHelmfile(rootFolder: string) {
-    const helmPath = path.join(rootFolder, `${helmfileToolName}${getExecutableExtension()}`);
-    const allPaths = tl.find(rootFolder);
-    const matchingResultsFiles = tl.match(allPaths, helmPath, rootFolder);
-    return matchingResultsFiles[0];
+function findVals(rootFolder: string) {
+  const helmPath = path.join(rootFolder, `${ValsToolName}${getExecutableExtension()}`);
+  const allPaths = tl.find(rootFolder);
+  const matchingResultsFiles = tl.match(allPaths, helmPath, rootFolder);
+  return matchingResultsFiles[0];
 }
 
-function getHelmfileDownloadURL(version: string): string {
-    switch (os.type()) {
-        case "Linux":
-            const architecture = getSupportedLinuxArchitecture();
-            return util.format("https://github.com/roboll/helmfile/releases/download/%s/helmfile_linux_%s", version, architecture);
+function getValsDownloadURL(version: string): string {
+  switch (os.type()) {
+    case 'Linux':
+      const architecture = getSupportedLinuxArchitecture();
+      return util.format('https://github.com/helmfile/vals/releases/download/%s/vals_linux_%s', version, architecture);
 
-        case "Darwin":
-            return util.format("https://github.com/roboll/helmfile/releases/download/%s/helmfile_darwin_amd64", version);
+    case 'Darwin':
+      return util.format('https://github.com/helmfile/vals/releases/download/%s/vals_darwin_amd64', version);
 
-        case "Windows_NT":
-            return util.format("https://github.com/roboll/helmfile/releases/download/%s/helmfile_windows_amd64.exe", version);
+    case 'Windows_NT':
+      return util.format('https://github.com/helmfile/vals/releases/download/%s/vals_windows_amd64.exe', version);
 
-        default:
-            throw Error("Unknown OS type");
-    }
+    default:
+      throw Error('Unknown OS type');
+  }
 }
 
-async function getStableHelmfileVersion(): Promise<string> {
-    try {
-        const downloadPath = await toolLib.downloadTool(helmfileAllReleasesUrl);
-        const responseArray = JSON.parse(fs.readFileSync(downloadPath, "utf8").toString().trim());
-        let latestHelmfileVersion = semver.clean(stableHelmfileVersion);
-        responseArray.forEach(response => {
-            if (response && response.tag_name) {
-                let currentHelmfileVersion = semver.clean(response.tag_name.toString());
-                if (currentHelmfileVersion) {
-                    if (currentHelmfileVersion.toString().indexOf("rc") == -1 && semver.gt(currentHelmfileVersion, latestHelmfileVersion)) {
-                        //If current helm version is not a pre release and is greater than latest helm version
-                        latestHelmfileVersion = currentHelmfileVersion;
-                    }
-                }
-            }
-        });
-        latestHelmfileVersion = "v" + latestHelmfileVersion;
-        return latestHelmfileVersion;
-    } catch (error) {
-        let telemetry = {
-            event: "HelmLatestNotKnown",
-            url: helmfileAllReleasesUrl,
-            error: error
-        };
-        console.log("##vso[telemetry.publish area=%s;feature=%s]%s",
-            "TaskEndpointId",
-            "HelmfileInstaller",
-            JSON.stringify(telemetry));
+async function getStableValsVersion(): Promise<string> {
+  try {
+    const downloadPath = await toolLib.downloadTool(valsAllReleasesUrl);
+    const responseArray = JSON.parse(
+      fs
+        .readFileSync(downloadPath, 'utf8')
+        .toString()
+        .trim()
+    );
+    let latestValsVersion = semver.clean(stableValsVersion);
+    responseArray.forEach(response => {
+      if (response && response.tag_name) {
+        let currentValsVersion = semver.clean(response.tag_name.toString());
+        if (currentValsVersion) {
+          if (currentValsVersion.toString().indexOf('rc') == -1 && semver.gt(currentValsVersion, latestValsVersion)) {
+            //If current vals version is not a pre release and is greater than latest vals version
+            latestValsVersion = currentValsVersion;
+          }
+        }
+      }
+    });
+    latestValsVersion = 'v' + latestValsVersion;
+    return latestValsVersion;
+  } catch (error) {
+    let telemetry = {
+      event: 'HelmLatestNotKnown',
+      url: valsAllReleasesUrl,
+      error: error
+    };
+    console.log('##vso[telemetry.publish area=%s;feature=%s]%s', 'TaskEndpointId', 'valsInstaller', JSON.stringify(telemetry));
 
-        tl.warning(`Unable to determine latest helmfile version '${stableHelmfileVersion}' at URL ${helmfileAllReleasesUrl}.`);
-    }
+    tl.warning(`Unable to determine latest vals version at URL ${valsAllReleasesUrl}. Using default version ${stableValsVersion}.`);
+  }
 
-    return stableHelmfileVersion;
+  return 'v' + stableValsVersion;
 }
 
 function sanitizeVersionString(inputVersion: string): string {
-    var version = toolLib.cleanVersion(inputVersion);
-    if (!version) {
-        throw new Error(`'${inputVersion}' is not a valid version string.`);
-    }
+  var version = toolLib.cleanVersion(inputVersion);
+  if (!version) {
+    throw new Error(`'${inputVersion}' is not a valid version string.`);
+  }
 
-    return "v" + version;
+  return 'v' + version;
 }
 
-export async function getHelmfile(version?: string) {
+export async function getVals(version?: string) {
+  try {
+    return Promise.resolve(tl.which('vals', true));
+  } catch (ex) {
+    return downloadVals(version);
+  }
+}
+
+export async function downloadVals(version?: string): Promise<string> {
+  if (!version) {
+    version = await getStableValsVersion();
+  }
+  let cachedToolpath = toolLib.findLocalTool(valsToolName, version);
+  if (!cachedToolpath) {
+    let valsDownloadPath: string;
+    const downloadUrl = getValsDownloadURL(version);
     try {
-        return Promise.resolve(tl.which("helmfile", true));
-    } catch (ex) {
-        return downloadHelmfile(version);
+      const tempDirectory = `${valsToolName}-${version}-${uuidV4()}`;
+      valsDownloadPath = await toolLib.downloadTool(downloadUrl, path.join(tempDirectory, valsToolName));
+    } catch (exception) {
+      throw new Error(`Failed to download vals at URL ${downloadUrl}. Exception: ${exception}`);
     }
+    cachedToolpath = await toolLib.cacheDir(path.dirname(valsDownloadPath), valsToolName, version);
+  }
+  const valspath = findVals(cachedToolpath);
+  if (!valspath) {
+    throw new Error(`Unable to find cached vals at path ${cachedToolpath}.`);
+  }
+
+  fs.chmodSync(valspath, '777');
+  return valspath;
 }
 
-export async function downloadHelmfile(version?: string): Promise<string> {
-    if (!version) { version = await getStableHelmfileVersion(); }
-    let cachedToolpath = toolLib.findLocalTool(helmfileToolName, version);
-    if (!cachedToolpath) {
-        let helmfileDownloadPath: string;
-        const downloadUrl = getHelmfileDownloadURL(version);
-        try {
-            const tempDirectory = `${helmfileToolName}-${version}-${uuidV4()}`;
-            helmfileDownloadPath = await toolLib.downloadTool(downloadUrl, path.join(tempDirectory, helmfileToolName));
-        } catch (exception) {
-            throw new Error(`Failed to download helmfile at URL ${downloadUrl}. Exception: ${exception}`);
-        }
-        cachedToolpath = await toolLib.cacheDir(path.dirname(helmfileDownloadPath), helmfileToolName, version);
-    }
-    const helmfilepath = findHelmfile(cachedToolpath);
-    if (!helmfilepath) {
-        throw new Error(`Unable to find cached helmfile at path ${cachedToolpath}.`);
-    }
+export async function getValsVersion(): Promise<string> {
+  let valsVersion = tl.getInput('valsVersionToInstall');
+  if (valsVersion && valsVersion != 'latest') {
+    return sanitizeVersionString(valsVersion);
+  }
 
-    fs.chmodSync(helmfilepath, "777");
-    return helmfilepath;
-}
-
-export async function getHelmfileVersion(): Promise<string> {
-    let helmfileVersion = tl.getInput("helmfileVersionToInstall");
-    if (helmfileVersion && helmfileVersion != "latest") {
-        return sanitizeVersionString(helmfileVersion);
-    }
-
-    return await getStableHelmfileVersion();
+  return await getStableValsVersion();
 }

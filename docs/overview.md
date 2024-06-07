@@ -1,10 +1,10 @@
-# Helmfile installer for Azure Pipelines
+# vals installer for Azure Pipelines
 
-This is an [Azure DevOps extension](https://marketplace.visualstudio.com/items?itemName=GSoft.HelmfileInstaller) that allows you to install the [helmfile cli tool](https://github.com/roboll/helmfile).
+This is an [Azure DevOps extension](https://marketplace.visualstudio.com/items?itemName=iotnxt.valsInstaller) that allows you to install the [vals cli tool](https://github.com/helmfile/vals).
 
 ## Installation
 
-Helmfile installer for Azure Pipelines can be installed from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GSoft.HelmfileInstaller).
+vals installer for Azure Pipelines can be installed from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=iotnxt.valsInstaller).
 
 ## Compiling
 
@@ -12,4 +12,4 @@ There are GitHub actions that take care of compiling, packaging and publishing t
 
 ## License
 
-Copyright © 2021, Groupe GSoft Inc. This code is licensed under the Apache License, Version 2.0. You may obtain a copy of this license at https://github.com/gsoft-inc/azure-pipelines-helmfile-installer/blob/main/LICENSE.
+Copyright © 2024, IoT.nxt B.V. This code is licensed under the Apache License, Version 2.0. You may obtain a copy of this license at https://github.com/IoT-nxt/azure-pipelines-vals-installer/blob/main/LICENSE.

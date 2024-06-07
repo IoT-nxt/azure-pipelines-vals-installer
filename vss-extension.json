@@ -1,9 +1,9 @@
 {
   "manifestVersion": 1,
-  "id": "HelmfileInstaller",
-  "name": "Helmfile Installer",
-  "version": "1.0.0",
-  "publisher": "GSoft",
+  "id": "valsInstaller",
+  "name": "vals Installer",
+  "version": "0.1.0",
+  "publisher": "iotnxt",
   "author": "Yohan Belval",
   "public": true,
   "galleryFlags": ["Public"],
@@ -12,7 +12,7 @@
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
-  "description": "Installs the helmfile command line tool on the executing host.",
+  "description": "Installs the vals command line tool on the executing host.",
   "tags": ["Helm", "Build", "Release", "Azure Pipelines", "Visual Studio Extensions"],
   "categories": ["Azure Pipelines"],
   "content": {
@@ -29,34 +29,34 @@
   "files": [
     {
       "path": "task/dist",
-      "packagePath": "Tasks/HelmfileInstaller/src"
+      "packagePath": "Tasks/ValsInstaller/src"
     },
     {
       "path": "task/node_modules",
-      "packagePath": "Tasks/HelmfileInstaller/node_modules"
+      "packagePath": "Tasks/ValsInstaller/node_modules"
     },
     {
       "path": "task/task.json",
-      "packagePath": "Tasks/HelmfileInstaller/task.json"
+      "packagePath": "Tasks/ValsInstaller/task.json"
     },
     {
       "path": "task/icon.png",
-      "packagePath": "Tasks/HelmfileInstaller/icon.png",
+      "packagePath": "Tasks/ValsInstaller/icon.png",
       "addressable": true
     }
   ],
   "contributions": [
     {
-      "id": "HelmfileInstaller",
+      "id": "ValsInstaller",
       "type": "ms.vss-distributed-task.task",
       "targets": ["ms.vss-distributed-task.tasks"],
       "properties": {
-        "name": "Tasks/HelmfileInstaller"
+        "name": "Tasks/ValsInstaller"
       }
     }
   ],
   "repository": {
     "type": "git",
-    "uri": "https://github.com/gsoft-inc/azure-pipelines-helmfile-installer"
+    "uri": "https://github.com/IoT-nxt/azure-pipelines-vals-installer"
   }
 }

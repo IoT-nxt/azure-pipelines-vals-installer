@@ -84,10 +84,10 @@ const run = async args => {
   console.log(`Updating extension information for ${args['release-type']}`);
 
   const settings = {
-    id: 'HelmfileInstaller',
-    name: 'Helmfile Installer',
-    publisher: 'GSoft',
-    version: { major: 1, minor: 0, patch: 0 },
+    id: 'valsInstaller',
+    name: 'vals Installer',
+    publisher: 'iotnxt',
+    version: { major: 0, minor: 1, patch: 0 },
     galleryFlags: ['Public'],
     public: true
   };
@@ -99,7 +99,7 @@ const run = async args => {
     case 'dev':
       settings.id += '-dev';
       settings.name += ' (dev)';
-      settings.publisher = 'gsoft-dev';
+      settings.publisher = 'iotnxt-dev';
       settings.galleryFlags = ['Preview'];
       settings.public = false;
 

@@ -3,26 +3,27 @@ import * as path from 'path';
 import * as toolLib from 'azure-pipelines-tool-lib';
 import * as utils from './utils';
 
-var version = ""
+var version = '';
 
-async function installHelmfile() {
-    version = await utils.getHelmfileVersion();
-    var helmfilePath = await utils.downloadHelmfile(version);
-    // prepend the tools path. instructs the agent to prepend for future tasks
-    if (!process.env['PATH'].startsWith(path.dirname(helmfilePath))) {
-        toolLib.prependPath(path.dirname(helmfilePath));
-    }
+async function installVals() {
+  version = await utils.getValsVersion();
+  var valsPath = await utils.downloadVals(version);
+  // prepend the tools path. instructs the agent to prepend for future tasks
+  if (!process.env['PATH'].startsWith(path.dirname(valsPath))) {
+    toolLib.prependPath(path.dirname(valsPath));
+  }
 }
 
-async function verifyHelmfile() {
-    console.log("Verifying helmfile installation...");
-    tl.which("helmfile", true);
+async function verifyVals() {
+  console.log('Verifying vals installation...');
+  tl.which('vals', true);
 }
 
-installHelmfile()
-    .then(() => verifyHelmfile())
-    .then(() => {
-        tl.setResult(tl.TaskResult.Succeeded, "");
-    }).catch((error) => {
-        tl.setResult(tl.TaskResult.Failed, error)
-    });
+installVals()
+  .then(() => verifyVals())
+  .then(() => {
+    tl.setResult(tl.TaskResult.Succeeded, '');
+  })
+  .catch(error => {
+    tl.setResult(tl.TaskResult.Failed, error);
+  });

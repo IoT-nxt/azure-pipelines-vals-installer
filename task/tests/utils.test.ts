@@ -12,7 +12,7 @@ const toolsDirectory = path.join(__dirname, 'tools');
 const inputStub = sinon.stub(tl, 'getInput');
 
 describe('vals util', () => {
-  before(function() {
+  before(function () {
     if (!fs.existsSync(tempDirectory)) {
       fs.mkdirSync(tempDirectory);
     }
@@ -24,13 +24,9 @@ describe('vals util', () => {
     tl.setVariable('agent.TempDirectory', tempDirectory);
     tl.setVariable('agent.ToolsDirectory', toolsDirectory);
   });
-  after(function() {
-    rimraf(tempDirectory, (_: any) => {
-      return;
-    });
-    rimraf(toolsDirectory, (_: any) => {
-      return;
-    });
+  after(function () {
+    rimraf.rimrafSync(tempDirectory);
+    rimraf.rimrafSync(toolsDirectory);
   });
   describe('#getValsVersion()', () => {
     it('should be able return semver when passing latest', async () => {

@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as toolLib from 'azure-pipelines-tool-lib';
 import * as os from 'os';
 import * as util from 'util';
-import * as uuidV4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import * as tl from 'azure-pipelines-task-lib';
 import * as semver from 'semver';
 
@@ -30,7 +30,7 @@ function getSupportedLinuxArchitecture(): string {
 }
 
 function findVals(rootFolder: string) {
-  const helmPath = path.join(rootFolder, `${ValsToolName}${getExecutableExtension()}`);
+  const helmPath = path.join(rootFolder, `${valsToolName}${getExecutableExtension()}`);
   const allPaths = tl.find(rootFolder);
   const matchingResultsFiles = tl.match(allPaths, helmPath, rootFolder);
   return matchingResultsFiles[0];
@@ -56,18 +56,13 @@ function getValsDownloadURL(version: string): string {
 async function getStableValsVersion(): Promise<string> {
   try {
     const downloadPath = await toolLib.downloadTool(valsAllReleasesUrl);
-    const responseArray = JSON.parse(
-      fs
-        .readFileSync(downloadPath, 'utf8')
-        .toString()
-        .trim()
-    );
+    const responseArray = JSON.parse(fs.readFileSync(downloadPath, 'utf8').toString().trim());
     let latestValsVersion = semver.clean(stableValsVersion);
-    responseArray.forEach(response => {
+    responseArray.forEach((response: { tag_name: string }) => {
       if (response && response.tag_name) {
         let currentValsVersion = semver.clean(response.tag_name.toString());
         if (currentValsVersion) {
-          if (currentValsVersion.toString().indexOf('rc') == -1 && semver.gt(currentValsVersion, latestValsVersion)) {
+          if (currentValsVersion.toString().indexOf('rc') == -1 && semver.gt(currentValsVersion, latestValsVersion!)) {
             //If current vals version is not a pre release and is greater than latest vals version
             latestValsVersion = currentValsVersion;
           }
@@ -116,7 +111,7 @@ export async function downloadVals(version?: string): Promise<string> {
     let valsDownloadPath: string;
     const downloadUrl = getValsDownloadURL(version);
     try {
-      const tempDirectory = `${valsToolName}-${version}-${uuidV4()}`;
+      const tempDirectory = `${valsToolName}-${version}-${uuidv4()}`;
       valsDownloadPath = await toolLib.downloadTool(downloadUrl, path.join(tempDirectory, valsToolName));
     } catch (exception) {
       throw new Error(`Failed to download vals at URL ${downloadUrl}. Exception: ${exception}`);

@@ -6,28 +6,25 @@
     "bump-version": "node version-bump.js",
     "publish": "tfx extension publish --publisher iotnxt",
     "publish:dev": "tfx extension publish --publisher iotnxt-dev",
-    "test": "mocha task/tests"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+    "test": "mocha --loader ts-node/esm -r ts-node/register task/tests",
+    "prepare": "husky"
   },
   "dependencies": {
-    "vss-web-extension-sdk": "^5.141.0"
+    "azure-devops-extension-sdk": "^4.0.2"
   },
   "devDependencies": {
-    "@types/mocha": "^7.0.1",
-    "@types/node": "^10.17.14",
-    "husky": "^4.2.1",
-    "minimist": "^1.2.3",
-    "mocha": "^7.0.1",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1",
-    "rimraf": "^3.0.1",
-    "tfx-cli": "^0.7.11",
-    "ts-node": "^8.6.2",
-    "tslint": "^6.0.0",
-    "typescript": "^3.7.5"
+    "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.14.2",
+    "eslint": "^9.4.0",
+    "husky": "^9.0.11",
+    "minimist": "^1.2.8",
+    "mocha": "^10.4.0",
+    "prettier": "^3.3.1",
+    "pretty-quick": "^4.0.0",
+    "rimraf": "^5.0.7",
+    "tfx-cli": "^0.17.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }

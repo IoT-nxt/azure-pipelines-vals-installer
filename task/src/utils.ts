@@ -126,7 +126,7 @@ export async function downloadVals(version?: string): Promise<string> {
     try {
       const tempDirectory = `${valsToolName}-${version}-${uuidv4()}`;
       let valsDownloadPath = await toolLib.downloadTool(downloadUrl, path.join(tempDirectory, valsToolName));
-      valsExtractDir = await toolLib.extractTar(valsDownloadPath, path.join(tempDirectory, 'extracted', valsToolName));
+      valsExtractDir = await toolLib.extractTar(valsDownloadPath, path.join(path.dirname(valsDownloadPath), 'extracted', valsToolName));
     } catch (exception) {
       throw new Error(`Failed to download vals at URL ${downloadUrl}. Exception: ${exception}`);
     }

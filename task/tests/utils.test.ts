@@ -22,8 +22,8 @@ describe('vals util', () => {
       fs.mkdirSync(toolsDirectory);
     }
 
-    tl.setVariable('agent.TempDirectory', tempDirectory);
-    tl.setVariable('agent.ToolsDirectory', toolsDirectory);
+    tl.setVariable('Agent.TempDirectory', tempDirectory);
+    tl.setVariable('Agent.ToolsDirectory', toolsDirectory);
   });
   after(function () {
     rimraf.rimrafSync(tempDirectory);

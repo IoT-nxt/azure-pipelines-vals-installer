@@ -86,7 +86,7 @@ const run = async args => {
   const settings = {
     id: 'valsInstaller',
     name: 'vals Installer',
-    publisher: 'iotnxt',
+    publisher: 'IoTnxt',
     version: { major: 0, minor: 1, patch: 0 },
     galleryFlags: ['Public'],
     public: true
@@ -99,7 +99,7 @@ const run = async args => {
     case 'dev':
       settings.id += '-dev';
       settings.name += ' (dev)';
-      settings.publisher = 'iotnxt-dev';
+      settings.publisher = 'IoTnxt-dev';
       settings.galleryFlags = ['Preview'];
       settings.public = false;
 

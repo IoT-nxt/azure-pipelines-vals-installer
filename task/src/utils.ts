@@ -9,7 +9,7 @@ import * as semver from 'semver';
 
 const valsToolName = 'vals';
 const valsAllReleasesUrl = 'https://api.github.com/repos/helmfile/vals/releases';
-const stableValsVersion = 'v0.137.2';
+const stableValsVersion = 'v0.37.2';
 
 function getExecutableExtension(): string {
   if (os.type().match(/^Win/)) {
@@ -40,13 +40,26 @@ function getValsDownloadURL(version: string): string {
   switch (os.type()) {
     case 'Linux':
       const architecture = getSupportedLinuxArchitecture();
-      return util.format('https://github.com/helmfile/vals/releases/download/%s/vals_linux_%s', version, architecture);
+      return util.format(
+        'https://github.com/helmfile/vals/releases/download/%s/vals_%s_linux_%s.tar.gz',
+        version,
+        semver.clean(version),
+        architecture
+      );
 
     case 'Darwin':
-      return util.format('https://github.com/helmfile/vals/releases/download/%s/vals_darwin_amd64', version);
+      return util.format(
+        'https://github.com/helmfile/vals/releases/download/%s/vals_%s_darwin_amd64.tar.gz',
+        version,
+        semver.clean(version)
+      );
 
     case 'Windows_NT':
-      return util.format('https://github.com/helmfile/vals/releases/download/%s/vals_windows_amd64.exe', version);
+      return util.format(
+        'https://github.com/helmfile/vals/releases/download/%s/vals_%s_windows_amd64.tar.gz',
+        version,
+        semver.clean(version)
+      );
 
     default:
       throw Error('Unknown OS type');
@@ -82,7 +95,7 @@ async function getStableValsVersion(): Promise<string> {
     tl.warning(`Unable to determine latest vals version at URL ${valsAllReleasesUrl}. Using default version ${stableValsVersion}.`);
   }
 
-  return 'v' + stableValsVersion;
+  return stableValsVersion;
 }
 
 function sanitizeVersionString(inputVersion: string): string {
@@ -108,15 +121,16 @@ export async function downloadVals(version?: string): Promise<string> {
   }
   let cachedToolpath = toolLib.findLocalTool(valsToolName, version);
   if (!cachedToolpath) {
-    let valsDownloadPath: string;
+    let valsExtractDir: string;
     const downloadUrl = getValsDownloadURL(version);
     try {
       const tempDirectory = `${valsToolName}-${version}-${uuidv4()}`;
-      valsDownloadPath = await toolLib.downloadTool(downloadUrl, path.join(tempDirectory, valsToolName));
+      let valsDownloadPath = await toolLib.downloadTool(downloadUrl, path.join(tempDirectory, valsToolName));
+      valsExtractDir = await toolLib.extractTar(valsDownloadPath, path.join(tempDirectory, 'extracted', valsToolName));
     } catch (exception) {
       throw new Error(`Failed to download vals at URL ${downloadUrl}. Exception: ${exception}`);
     }
-    cachedToolpath = await toolLib.cacheDir(path.dirname(valsDownloadPath), valsToolName, version);
+    cachedToolpath = await toolLib.cacheDir(valsExtractDir, valsToolName, version);
   }
   const valspath = findVals(cachedToolpath);
   if (!valspath) {

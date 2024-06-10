@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as rimraf from 'rimraf';
 import * as sinon from 'sinon';
+import 'mocha';
 
 const tempDirectory = path.join(__dirname, 'temp');
 const toolsDirectory = path.join(__dirname, 'tools');
@@ -38,7 +39,7 @@ describe('vals util', () => {
       expect(semver.patch(version)).to.be.an('number');
     });
     it('should be able return semver when passing vx.x.x', async () => {
-      inputStub.withArgs('valsVersionToInstall').returns('v0.139.9');
+      inputStub.withArgs('valsVersionToInstall').returns('v0.37.2');
       const version = await utils.getValsVersion();
       expect(version).to.not.be.empty;
       expect(semver.major(version)).to.be.an('number');
@@ -60,7 +61,7 @@ describe('vals util', () => {
       expect(fs.existsSync(executable)).true;
     });
     it('should be able to download specific version', async () => {
-      const executable = await utils.downloadVals('v0.139.8');
+      const executable = await utils.downloadVals('v0.37.2');
       expect(executable).to.not.be.empty;
       expect(fs.existsSync(executable)).true;
     });

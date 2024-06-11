@@ -1,7 +1,8 @@
-import * as tl from 'azure-pipelines-task-lib';
+import tl = require('azure-pipelines-task-lib/task');
 import * as path from 'path';
 import * as toolLib from 'azure-pipelines-tool-lib';
 import * as utils from './utils';
+const process = require('node:process');
 
 var version = '';
 

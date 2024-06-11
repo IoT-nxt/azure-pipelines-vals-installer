@@ -19,7 +19,7 @@ async function getPublishedVersion(token, publisher, extensionId) {
       const extensionData = JSON.parse(stdout);
       if (!extensionData) {
         // Default to 1.0.0 if no extension is found in the market
-        resolve({ major: 1, minor: 0, patch: 0 });
+        resolve({ major: 0, minor: 1, patch: 0 });
         return;
       }
 
@@ -84,8 +84,8 @@ const run = async args => {
   console.log(`Updating extension information for ${args['release-type']}`);
 
   const settings = {
-    id: 'valsInstaller',
-    name: 'vals Installer',
+    id: 'valsTools',
+    name: 'vals Tools',
     publisher: 'IoTnxt',
     version: { major: 0, minor: 1, patch: 0 },
     galleryFlags: ['Public'],
@@ -97,7 +97,6 @@ const run = async args => {
 
   switch (args['release-type']) {
     case 'dev':
-      settings.id += '-dev';
       settings.name += ' (dev)';
       settings.publisher = 'IoTnxt-dev';
       settings.galleryFlags = ['Preview'];

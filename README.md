@@ -1,10 +1,10 @@
 # vals installer for Azure Pipelines
 
-This is an [Azure DevOps extension](https://marketplace.visualstudio.com/items?itemName=iotnxt.valsInstaller) that allows you to install the [vals cli tool](https://github.com/helmfile/vals).
+This is an [Azure DevOps extension](https://marketplace.visualstudio.com/items?itemName=IoTnxt.valsTools) that allows you to install and use the [vals cli tool](https://github.com/helmfile/vals).
 
 ## Installation
 
-vals installer for Azure Pipelines can be installed from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=iotnxt.valsInstaller).
+vals tools for Azure Pipelines can be installed from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=IoTnxt.valsTools).
 
 ## Compiling
 

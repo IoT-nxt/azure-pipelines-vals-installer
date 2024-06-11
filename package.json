@@ -2,7 +2,7 @@
   "name": "vals-installer-pipeline-task",
   "scripts": {
     "postinstall": "cd task && npm install",
-    "package": "rimraf *.vsix task/dist && tsc -p task && tfx extension create --output-path PackageOutput",
+    "package": "rimraf PackageOutput task/dist && tsc -p task && npm prune --omit=dev && tfx extension create --output-path PackageOutput",
     "bump-version": "node version-bump.js",
     "publish": "tfx extension publish --publisher IoTnxt",
     "publish:dev": "tfx extension publish --publisher IoTnxt-dev",

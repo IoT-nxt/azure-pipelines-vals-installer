@@ -1,10 +1,10 @@
 {
   "manifestVersion": 1,
-  "id": "valsInstaller",
-  "name": "vals Installer",
-  "version": "0.1.0",
-  "publisher": "iotnxt",
-  "author": "Yohan Belval",
+  "id": "valsTools",
+  "name": "vals Tools",
+  "version": "0.1.1",
+  "publisher": "IoTnxt",
+  "author": "IoT.nxt",
   "public": true,
   "galleryFlags": ["Public"],
   "targets": [
@@ -13,7 +13,7 @@
     }
   ],
   "description": "Installs the vals command line tool on the executing host.",
-  "tags": ["Helm", "Build", "Release", "Azure Pipelines", "Visual Studio Extensions"],
+  "tags": ["Helm", "Build", "Release", "Azure Pipelines"],
   "categories": ["Azure Pipelines"],
   "content": {
     "details": {
